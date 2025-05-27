@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ModeToggle } from './Togglebtn';
 import { RiMenu3Line, RiCloseLine } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
-import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa'; // Changed here
+import { Link, useLocation } from 'react-router-dom';
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
 const Navbar = () => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,6 +16,8 @@ const Navbar = () => {
     const contactRef = useRef(null);
     const rightItemsRef = useRef(null);
     const dropdownRef = useRef(null);
+
+    const location = useLocation();
 
     // Add this function to close the mobile menu
     const closeMobileMenu = () => {
@@ -64,6 +66,33 @@ const Navbar = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    useEffect(() => {
+        closeMobileMenu();
+        setIsServicesDropdownOpen(false);
+    }, [location]);
+
+    const dropdownDelay = 150; // Adjust this value (milliseconds)
+
+    const [dropdownTimeoutId, setDropdownTimeoutId] = useState(null);
+
+    const openDropdown = () => {
+        if (dropdownTimeoutId) {
+            clearTimeout(dropdownTimeoutId);
+        }
+        setDropdownTimeoutId(null);
+        setIsServicesDropdownOpen(true);
+    };
+
+    const closeDropdown = () => {
+        if (dropdownTimeoutId) {
+            clearTimeout(dropdownTimeoutId);
+        }
+        const timeoutId = setTimeout(() => {
+            setIsServicesDropdownOpen(false);
+        }, dropdownDelay);
+        setDropdownTimeoutId(timeoutId);
+    };
+
     return (
         <nav ref={navRef} className="fixed top-0 left-0 right-0 z-50 w-full bg-white px-4  shadow-md transition-colors 
         duration-300 ease-in-out dark:bg-gray-900 dark:shadow-lg dark:shadow-gray-800/40 md:px-8">
@@ -94,13 +123,14 @@ const Navbar = () => {
                         }} className="cursor-pointer font-medium text-black transition-colors duration-200 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400">About</Link>
                     
                     {/* Services Dropdown */}
-                    <li className="relative group" ref={dropdownRef}>
+                    <li className="relative group" ref={dropdownRef}
+                        onMouseEnter={openDropdown}
+                        onMouseLeave={closeDropdown}
+                    >
                         <button
                             type="button"
                             className="cursor-pointer font-medium text-black transition-colors duration-200 hover:text-blue-600 dark:text-gray-200 dark:hover:text-blue-400 flex items-center"
                             onClick={() => setIsServicesDropdownOpen((open) => !open)}
-                            onMouseEnter={() => setIsServicesDropdownOpen(true)}
-                            onMouseLeave={() => setIsServicesDropdownOpen(false)}
                         >
                             Services
                             <svg className="ml-1 h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -110,8 +140,6 @@ const Navbar = () => {
                         {/* Dropdown Menu */}
                         <ul
                             className={`absolute left-0 mt-2 w-64 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-gray-800 z-50 transition-all duration-200 ${isServicesDropdownOpen ? 'block' : 'hidden'}`}
-                            onMouseEnter={() => setIsServicesDropdownOpen(true)}
-                            onMouseLeave={() => setIsServicesDropdownOpen(false)}
                         >
                             <li>
                                 <Link

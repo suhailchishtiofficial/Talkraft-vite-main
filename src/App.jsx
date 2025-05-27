@@ -51,7 +51,6 @@ const App = () => {
            <Route path='/cookies' element={<Cookies/>}/>
            <Route path='/blog' element={<Blog/>}/>
         </Routes>
-        
       <Footer/>
       <WhatsappButton/>
     </div>

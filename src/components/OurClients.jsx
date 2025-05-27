@@ -2,21 +2,20 @@ import React, { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { Link } from "react-router-dom";
 
-
 // Example client logos (replace with your own images)
 const clientLogos = [
-  "/img/1.jpg",
-  "/img/2.jpg",
-  "/img/3.jpg",
-  "/img/4.jpg",
-  "/img/5.jpg",
-  "/img/6.jpg",
-  "/img/7.jpg",
-  "/img/8.jpg",
-  "/img/9.jpg",
-  "/img/10.jpg",
-  "/img/11.jpg",
-  "/img/12.jpg",
+  "/img/1.png",
+  "/img/2.png",
+  "/img/3.png",
+  "/img/4.png",
+  "/img/5.png",
+  "/img/6.png",
+  "/img/7.png",
+  "/img/8.png",
+  "/img/9.png",
+  "/img/10.png",
+  "/img/11.png",
+  "/img/12.png",
 ];
 
 const OurClients = () => {
@@ -28,19 +27,15 @@ const OurClients = () => {
     const slider = sliderRef.current;
     const totalWidth = slider.scrollWidth / 2; // Only half, since we duplicated
 
-    const tween = gsap.to(slider, {
+    gsap.to(slider, {
       x: -totalWidth,
-      duration: 28,
+      duration: 32,
       ease: "linear",
       repeat: -1,
       modifiers: {
         x: gsap.utils.unitize((x) => parseFloat(x) % -totalWidth), // seamless loop
       },
     });
-
-    return () => {
-      tween.kill();
-    };
   }, []);
 
   return (
@@ -64,17 +59,16 @@ const OurClients = () => {
             {logos.map((logo, idx) => (
               <div
                 key={idx}
-                className="flex-shrink-0 w-50 h-60 md:w-50 md:h-60 flex items-center justify-center hover:scale-105 transition-transform duration-300"
+                className="flex-shrink-0 w-60 h-60 md:w-60 md:h-60 flex items-center justify-center hover:scale-105 transition-transform duration-300 rounded-full overflow-hidden mt-10 mb-10"
                 style={{
                   background: "transparent",
                   boxShadow: "none",
-                  borderRadius: 0,
                 }}
               >
                 <img
                   src={logo}
                   alt={`Client ${idx + 1}`}
-                  className="object-contain w-full h-full p-4"
+                  className="object-contain w-full h-full"
                   draggable={false}
                 />
               </div>
@@ -82,9 +76,13 @@ const OurClients = () => {
           </div>
         </div>
         <div className="flex justify-center">
-          <Link  onClick={(e) => {
-                            window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to the top smoothly
-                        }} to="/all-clients" className="inline-block px-10 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+          <Link
+            onClick={(e) => {
+              window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to the top smoothly
+            }}
+            to="/all-clients"
+            className="inline-block px-10 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg shadow hover:bg-blue-700 transition"
+          >
             View All
           </Link>
         </div>
